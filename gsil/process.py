@@ -15,7 +15,7 @@ import os
 import time
 import shutil
 import subprocess
-from jinja2 import utils
+from markupsafe import escape
 from .notification import Notification
 from .config import Config, get, daily_run_data, code_path
 from .log import logger
@@ -33,21 +33,21 @@ class Process(object):
 
     def process(self, maybe_mistake=False):
         logger.info(f'Process count: {len(self.content)}')
-        ret_mail = self._send_mail(maybe_mistake)
-        if ret_mail:
+        ret_notification = self._send_notification(maybe_mistake)
+        if ret_notification:
             for i, v in self.content.items():
                 Config().add_hash(v['hash'])
                 logger.debug('{hash} add success!'.format(hash=v['hash']))
-            logger.debug('send mail success!')
-        return ret_mail
+            logger.debug('send notification success!')
+        return ret_notification
 
-    def _send_mail(self, maybe_mistake=False):
+    def _send_notification(self, maybe_mistake=False):
         """
-        Send mail
+        Send notification
         :return: boolean
         """
         if len(self.content) == 0:
-            logger.info('none content for send mail')
+            logger.info('none content for send notification')
             return True
         if maybe_mistake:
             title = '〔GSIL〕MB_MT '
@@ -66,7 +66,7 @@ class Process(object):
             if len(v['match_codes']) > 0:
                 code = ''
                 for c in v['match_codes']:
-                    code += '{c}<br>'.format(c=utils.escape(c))
+                    code += '{c}<br>'.format(c=escape(c))
                 html += '<code>{code}</code><hr>'.format(code=code)
             self._save_file(v['hash'], v['code'])
         html += '</table></body>'

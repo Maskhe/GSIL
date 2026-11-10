@@ -13,19 +13,19 @@
 """
 import base64
 import pytest
-from github import Github, BadCredentialsException
+from github import Auth, Github, BadCredentialsException
 
 TOKEN = base64.b64decode('YzA4YTVhOTA1ZGExYjg5YTc1ZmI4NmE3MmM3ZjUyNzg2NmRmZmRlNA==').decode()
 
 
 def test_init_success():
-    g = Github(login_or_token=TOKEN)
+    g = Github(auth=Auth.Token(TOKEN))
     try:
         limit, limit2 = g.rate_limiting
         assert limit > 4900
     except BadCredentialsException as e:
         assert False
 
-    g = Github(login_or_token=TOKEN[0:18])
+    g = Github(auth=Auth.Token(TOKEN[0:18]))
     with pytest.raises(BadCredentialsException) as e:
         g = g.rate_limiting

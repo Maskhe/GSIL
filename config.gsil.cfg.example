@@ -7,6 +7,24 @@ password : your_password
 to : feei@feei.cn
 cc : feei@feei.cn
 
+[notification]
+# channels supports: mail,dingtalk
+# default behavior: if not configured, mail is enabled;
+# dingtalk is enabled automatically when [dingtalk].webhook is configured.
+channels : mail
+
+[dingtalk]
+# DingTalk custom robot webhook
+webhook : https://oapi.dingtalk.com/robot/send?access_token=your_access_token
+# Optional: security secret configured in DingTalk robot
+secret :
+# Optional: mobile numbers separated by comma
+at_mobiles :
+# Optional: true/false
+at_all : false
+# Optional: true sends markdown, false sends text
+use_markdown : true
+
 [github]
 clone : false
 tokens : your_github_token

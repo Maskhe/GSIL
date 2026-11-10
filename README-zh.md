@@ -30,6 +30,21 @@ password : your_password
 # 多个收件人使用逗号(,)分隔
 to : feei@feei.cn
 
+[notification]
+# channels 支持: mail,dingtalk
+# 如果不配置该节，默认启用邮件；若配置了 dingtalk webhook 则会自动启用钉钉推送。
+channels : mail
+
+[dingtalk]
+# 钉钉自定义机器人 Webhook
+webhook : https://oapi.dingtalk.com/robot/send?access_token=your_access_token
+# 可选：机器人安全设置中的加签密钥
+secret :
+# 可选：@手机号，多个用逗号分隔
+at_mobiles :
+at_all : false
+use_markdown : true
+
 [github]
 # 扫描到的漏洞仓库是否立刻Clone到本地（~/.gsil/codes/）
 # 此选项用作监控其它厂商，避免因为仓库所有者发现后被删除
@@ -89,6 +104,16 @@ $ python gsil.py test
 
 # 测试token有效性
 $ python gsil.py --verify-tokens
+
+# 发送一条测试通知（按配置走邮件/钉钉）
+$ python gsil.py --test-notify
+
+# 发送自定义内容的测试通知
+$ python gsil.py --test-notify "hello from cron"
+
+# 仅测试单个通道
+$ python gsil.py --test-notify --channel dingtalk "hello"
+$ python gsil.py --test-notify --channel mail "hello"
 ```
 
 ```bash

@@ -9,6 +9,8 @@
 
     Usage:
         python gsil.py test
+        python gsil.py --test-notify
+        python gsil.py --test-notify --channel dingtalk "hello"
 
     :author:    Feei <feei@feei.cn>
     :homepage:  https://github.com/wufeifei/cobra

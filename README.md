@@ -30,6 +30,22 @@ password : your_password
 # Multiple recipients are separated by comma (,)
 to : feei@feei.cn
 
+[notification]
+# channels supports: mail,dingtalk
+# If this section is missing, mail is enabled by default;
+# dingtalk will be enabled automatically when dingtalk webhook is configured.
+channels : mail
+
+[dingtalk]
+# DingTalk custom robot webhook
+webhook : https://oapi.dingtalk.com/robot/send?access_token=your_access_token
+# Optional: sign secret configured in DingTalk robot
+secret :
+# Optional: comma-separated mobiles to @
+at_mobiles :
+at_all : false
+use_markdown : true
+
 [github]
 # Whether the scanned data will be cloned to the local area immediately
 # Clone to ~/.gsil/codes/ directory
@@ -86,6 +102,16 @@ $ python gsil.py test
 
 # Verify tokens validity
 $ python gsil.py --verify-tokens
+
+# Send a test notification (mail/dingtalk by your config)
+$ python gsil.py --test-notify
+
+# Send a test notification with custom text
+$ python gsil.py --test-notify "hello from cron"
+
+# Send test notification to one channel only
+$ python gsil.py --test-notify --channel dingtalk "hello"
+$ python gsil.py --test-notify --channel mail "hello"
 ```
 
 ```bash

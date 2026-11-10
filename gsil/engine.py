@@ -15,7 +15,7 @@ import re
 import socket
 import traceback
 import requests
-from github import Github, GithubException
+from github import Auth, Github, GithubException
 from bs4 import BeautifulSoup
 from gsil.config import Config, public_mail_services, exclude_repository_rules, exclude_codes_rules
 from .process import Process, clone
@@ -49,7 +49,7 @@ class Engine(object):
         GitHub engine
         """
         self.token = token
-        self.g = Github(login_or_token=token, per_page=per_page)
+        self.g = Github(auth=Auth.Token(token), per_page=per_page)
         self.rule_object = None
         self.code = ''
         # jquery/jquery

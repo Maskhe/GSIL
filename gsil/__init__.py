@@ -20,6 +20,7 @@ from .engine import Engine
 from .log import logger
 from .config import Config, get_rules, tokens, daily_run_data
 from .process import send_running_data_report
+from .notification import Notification
 
 running_data = []
 
@@ -94,6 +95,33 @@ def gsil():
     if sys.argv[1] == '--report':
         # send daily running data report
         send_running_data_report()
+    elif sys.argv[1] == '--test-notify':
+        title = '〔GSIL〕NOTIFY TEST'
+        channel = None
+        body_tokens = []
+        args = sys.argv[2:]
+        idx = 0
+        while idx < len(args):
+            arg = args[idx]
+            if arg in ['--channel', '-c'] and idx + 1 < len(args):
+                channel = args[idx + 1].strip().lower()
+                idx += 2
+                continue
+            if arg.startswith('--channel='):
+                channel = arg.split('=', 1)[1].strip().lower()
+                idx += 1
+                continue
+            body_tokens.append(arg)
+            idx += 1
+
+        if len(body_tokens) > 0:
+            body = ' '.join(body_tokens)
+        else:
+            body = 'This is a test notification from GSIL.'
+        content = f'<h3>{title}</h3><p>{body}</p><p>{time.strftime("%Y-%m-%d %H:%M:%S")}</p>'
+        ret = Notification(title).notification(content, channels_override=channel)
+        logger.info(f'test notification result: {ret} channel={channel if channel else "config"}')
+        return ret
     elif sys.argv[1] == '--verify-tokens':
         # verify tokens
         for i, token in enumerate(tokens):
